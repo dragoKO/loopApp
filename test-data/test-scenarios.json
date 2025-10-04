@@ -1,0 +1,42 @@
+{
+  "testSuites": [
+    {
+      "id": "help-center-login-tests",
+      "name": "Help Center Login Test",
+      "description": "Verify user can successfully log in to Help Center with valid credentials",
+      "testCases": [
+        {
+          "id": "valid-login",
+          "name": "User login with valid credentials",
+          "description": "Verify user can log in successfully with valid username and password",
+          "priority": "high",
+          "tags": ["@paradigm", "@smoke"],
+          "steps": [
+            {
+              "action": "navigateToLoginPage",
+              "description": "Navigate to Help Center login page"
+            },
+            {
+              "action": "fillUsername",
+              "description": "Fill username field",
+              "value": "ConfigReader.getConfigValue('email')"
+            },
+            {
+              "action": "fillPassword",
+              "description": "Fill password field",
+              "value": "ConfigReader.getConfigValue('password')"
+            },
+            {
+              "action": "clickLoginButton",
+              "description": "Click login button"
+            },
+            {
+              "action": "verifySuccessfulLogin",
+              "description": "Verify successful login by checking URL or page content"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
