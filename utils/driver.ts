@@ -1,4 +1,4 @@
-import { chromium, firefox, webkit, Browser, BrowserContext, Page, BrowserType } from '@playwright/test';
+import { chromium, Browser, BrowserContext, Page, BrowserType } from '@playwright/test';
 import { ConfigReader } from './configReader';
 
 export class Driver {
@@ -39,62 +39,11 @@ export class Driver {
             ];
 
             switch (browserType) {
-                case 'chrome':
-                    browserLauncher = chromium;
-                    Driver.browserInstance = await browserLauncher.launch({
-                        channel: 'chrome',
-                        headless: false,
-                        args: driverArgs,
-                        ignoreDefaultArgs: ['--enable-blink-features=IdleDetection']
-                    });
-                    break;
-                case 'chromeheadless':
-                    browserLauncher = chromium;
-                    Driver.browserInstance = await browserLauncher.launch({
-                        channel: 'chrome',
-                        headless: true,
-                        args: driverArgs
-                    });
-                    break;
                 case 'chromium':
-                    browserLauncher = chromium;
-                    Driver.browserInstance = await browserLauncher.launch({
-                        headless: true,
-                        args: driverArgs
-                    });
-                    break;
                 case 'chromiumgui':
                     browserLauncher = chromium;
                     Driver.browserInstance = await browserLauncher.launch({
-                        headless: false,
-                        args: driverArgs
-                    });
-                    break;
-                case 'firefox':
-                    browserLauncher = firefox;
-                    Driver.browserInstance = await browserLauncher.launch({
-                        headless: false,
-                        args: driverArgs
-                    });
-                    break;
-                case 'firefoxheadless':
-                    browserLauncher = firefox;
-                    Driver.browserInstance = await browserLauncher.launch({
-                        headless: true,
-                        args: driverArgs
-                    });
-                    break;
-                case 'safari':
-                    browserLauncher = webkit;
-                    Driver.browserInstance = await browserLauncher.launch({
-                        headless: false,
-                        args: driverArgs
-                    });
-                    break;
-                case 'safariheadless':
-                    browserLauncher = webkit;
-                    Driver.browserInstance = await browserLauncher.launch({
-                        headless: true,
+                        headless: browserType === 'chromium',
                         args: driverArgs
                     });
                     break;
@@ -112,13 +61,6 @@ export class Driver {
                 ignoreHTTPSErrors: true,
                 viewport: null,
             };
-
-            if (ConfigReader.getConfigValue('playwrightVideo').toLowerCase() === 'on') {
-                contextArgs.recordVideo = {
-                    dir: 'reports/videos/',
-                    size: { width: 1920, height: 1080 }
-                };
-            }
 
             Driver.contextInstance = await Driver.browserInstance!.newContext(contextArgs);
             await Driver.contextInstance.grantPermissions(['clipboard-read', 'clipboard-write']);

@@ -3,27 +3,28 @@ import { Driver } from './utils/driver';
 import { LogInPage } from './pages/app/logInPage';
 import { ConfigReader } from './utils/configReader';
 import { logger } from './utils/logger';
+import { expect } from '@playwright/test';
+import { BasePage } from './pages/app/basePage';
 
 interface TestStep {
   action: string;
-  description: string;
-  value?: string;
-  expectedMessage?: string;
+  section?: string;
+  taskName?: string;
+  todoText?: string;
+  columnName?: string;
+  tags?: string[];
+  appName?: string;
 }
 
 interface TestCase {
   id: string;
   name: string;
-  description: string;
-  priority: string;
-  tags?: string[];
   steps: TestStep[];
 }
 
 interface TestSuite {
   id: string;
   name: string;
-  description: string;
   testCases: TestCase[];
 }
 
@@ -53,66 +54,54 @@ export class TestRunner {
         await this.runTestCase(suite, testCase);
       }
     }
-    await Driver.close();
   }
 
   private async runTestCase(suite: TestSuite, testCase: TestCase): Promise<void> {
-    logger.info(`Running test case: ${testCase.name}`);
+    logger.info(`Running: ${testCase.name}`);
+    
+    // Create new driver instance for this test case
+    await Driver.createContext();
 
     try {
       for (let i = 0; i < testCase.steps.length; i++) {
         const step = testCase.steps[i];
-        logger.info(`Executing step ${i + 1}: ${step.description}`);
+        logger.info(`Step ${i + 1}: ${step.action}`);
 
-        try {
-          await this.executeStep(step);
-          logger.info(`Step ${i + 1} passed`);
-        } catch (stepError: any) {
-          logger.error(`Step ${i + 1} failed: ${stepError.message}`);
-          throw stepError; // Stop executing further steps for this test case
-        }
+        await this.executeStep(step);
+        logger.info(`Step ${i + 1} completed`);
       }
-      logger.info(`Test case ${testCase.name} completed successfully`);
-    } catch (error: any) {
-      logger.error(`Test case ${testCase.name} failed: ${error.message}`);
-      throw error;
+      
+      logger.info(`${testCase.name} completed`);
+    } finally {
+      // Always close the driver instance after test case completion
+      await Driver.close();
     }
   }
 
   private async executeStep(step: TestStep): Promise<void> {
     const loginPage = new LogInPage();
+    const basePage = new BasePage();
 
     switch (step.action) {
-      case 'navigateToLoginPage':
+      case 'logInToDemoApp':
         await loginPage.navigateToLoginPage();
-        break;
-      case 'fillUsername':
-        if (step.value) {
-          const username = step.value.includes('ConfigReader') ? 
-            ConfigReader.getConfigValue('email') : step.value;
-          await loginPage.fillUsername(username);
-        }
-        break;
-      case 'fillPassword':
-        if (step.value) {
-          const password = step.value.includes('ConfigReader') ? 
-            ConfigReader.getConfigValue('password') : step.value;
-          await loginPage.fillPassword(password);
-        }
-        break;
-      case 'clickLoginButton':
+        await loginPage.fillUsername(ConfigReader.getConfigValue('email'));
+        await loginPage.fillPassword(ConfigReader.getConfigValue('password'));
         await loginPage.clickLoginButton();
         break;
-      case 'verifySuccessfulLogin':
-        // Wait for page to load and check if we're on a different page (successful login)
-        const page = await Driver.getPage();
-        await page.waitForTimeout(2000); // Wait for redirect
-        
-        const currentUrl = page.url();
-        // Check if URL changed from login page (successful login)
-        if (currentUrl.includes('/login') || currentUrl.includes('signin')) {
-          throw new Error(`Login failed - still on login page. Current URL: ${currentUrl}`);
-        }
+      case 'navigateToWebApplication':
+        await basePage.navigateTo('Web Application');
+        break;
+      case 'navigateToMobileApplication':
+        await basePage.navigateTo('Mobile Application');
+        break;
+      case 'verifyItemsInSection':
+        const tasksList = await loginPage.getAllTasksForSections(step.columnName!);
+        expect(tasksList).toContain(step.todoText);
+        break;
+      case 'confirmTags':
+        const tags = await loginPage.getTaskTags(step.columnName!, step.taskName!);
+        expect(tags).toEqual(expect.arrayContaining(step.tags!));
         break;
       default:
         throw new Error(`Unknown action: ${step.action}`);

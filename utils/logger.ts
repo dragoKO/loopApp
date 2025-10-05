@@ -1,10 +1,4 @@
 import * as winston from 'winston';
-import * as fs from 'fs-extra';
-import * as path from 'path';
-
-// Ensure logs directory exists
-const logDir = 'reports';
-fs.ensureDirSync(logDir);
 
 export const logger = winston.createLogger({
     level: 'info',
@@ -22,10 +16,6 @@ export const logger = winston.createLogger({
                 winston.format.colorize(),
                 winston.format.simple()
             )
-        }),
-        new winston.transports.File({
-            filename: path.join(logDir, 'test_logs.log'),
-            level: 'info'
         })
     ]
 });

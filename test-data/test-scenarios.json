@@ -1,38 +1,162 @@
 {
   "testSuites": [
     {
-      "id": "help-center-login-tests",
-      "name": "Help Center Login Test",
-      "description": "Verify user can successfully log in to Help Center with valid credentials",
+      "id": "suite-1",
+      "name": "Suite 1",
       "testCases": [
         {
-          "id": "valid-login",
-          "name": "User login with valid credentials",
-          "description": "Verify user can log in successfully with valid username and password",
-          "priority": "high",
-          "tags": ["@paradigm", "@smoke"],
+          "id": "test-case-1",
+          "name": "Test Case 1",
           "steps": [
             {
-              "action": "navigateToLoginPage",
-              "description": "Navigate to Help Center login page"
+              "action": "logInToDemoApp",
+              "appName": "Demo App"
             },
             {
-              "action": "fillUsername",
-              "description": "Fill username field",
-              "value": "ConfigReader.getConfigValue('email')"
+              "action": "navigateToWebApplication",
+              "section": "Web Application"
             },
             {
-              "action": "fillPassword",
-              "description": "Fill password field",
-              "value": "ConfigReader.getConfigValue('password')"
+              "action": "verifyItemsInSection",
+              "todoText": "Implement user authentication",
+              "columnName": "toDo"
             },
             {
-              "action": "clickLoginButton",
-              "description": "Click login button"
+              "action": "confirmTags",
+              "section": "Web Application",
+              "columnName": "toDo",
+              "taskName": "Implement user authentication",
+              "tags": ["Feature", "High Priority"]
+            }
+          ]
+        },
+        {
+          "id": "test-case-2",
+          "name": "Test Case 2",
+          "steps": [
+            {
+              "action": "logInToDemoApp",
+              "appName": "Demo App"
             },
             {
-              "action": "verifySuccessfulLogin",
-              "description": "Verify successful login by checking URL or page content"
+              "action": "navigateToWebApplication",
+              "section": "Web Application"
+            },
+            {
+              "action": "verifyItemsInSection",
+              "todoText": "Fix navigation bug",
+              "columnName": "toDo"
+            },
+            {
+              "action": "confirmTags",
+              "section": "Web Application",
+              "columnName": "toDo",
+              "taskName": "Fix navigation bug",
+              "tags": ["Bug"]
+            }
+          ]
+        },
+        {
+          "id": "test-case-3",
+          "name": "Test Case 3",
+          "steps": [
+            {
+              "action": "logInToDemoApp",
+              "appName": "Demo App"
+            },
+            {
+              "action": "navigateToWebApplication",
+              "section": "Web Application"
+            },
+            {
+              "action": "verifyItemsInSection",
+              "todoText": "Design system updates",
+              "columnName": "inProgress"
+            },
+            {
+              "action": "confirmTags",
+              "section": "Web Application",
+              "columnName": "inProgress",
+              "taskName": "Design system updates",
+              "tags": ["Design"]
+            }
+          ]
+        },
+        {
+          "id": "test-case-4",
+          "name": "Test Case 4",
+          "steps": [
+            {
+              "action": "logInToDemoApp",
+              "appName": "Demo App"
+            },
+            {
+              "action": "navigateToMobileApplication",
+              "section": "Mobile Application"
+            },
+            {
+              "action": "verifyItemsInSection",
+              "todoText": "Push notification system",
+              "columnName": "toDo"
+            },
+            {
+              "action": "confirmTags",
+              "section": "Mobile Application",
+              "columnName": "toDo",
+              "taskName": "Push notification system",
+              "tags": ["Feature"]
+            }
+          ]
+        },
+        {
+          "id": "test-case-5",
+          "name": "Test Case 5",
+          "steps": [
+            {
+              "action": "logInToDemoApp",
+              "appName": "Demo App"
+            },
+            {
+              "action": "navigateToMobileApplication",
+              "section": "Mobile Application"
+            },
+            {
+              "action": "verifyItemsInSection",
+              "todoText": "Offline mode",
+              "columnName": "inProgress"
+            },
+            {
+              "action": "confirmTags",
+              "section": "Mobile Application",
+              "columnName": "inProgress",
+              "taskName": "Offline mode",
+              "tags": ["Feature", "High Priority"]
+            }
+          ]
+        },
+        {
+          "id": "test-case-6",
+          "name": "Test Case 6",
+          "steps": [
+            {
+              "action": "logInToDemoApp",
+              "appName": "Demo App"
+            },
+            {
+              "action": "navigateToMobileApplication",
+              "section": "Mobile Application"
+            },
+            {
+              "action": "verifyItemsInSection",
+              "todoText": "App icon design",
+              "columnName": "done"
+            },
+            {
+              "action": "confirmTags",
+              "section": "Mobile Application",
+              "columnName": "done",
+              "taskName": "App icon design",
+              "tags": ["Design"]
             }
           ]
         }
