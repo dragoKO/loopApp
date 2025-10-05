@@ -31,7 +31,6 @@ export class LogInPage {
     async navigateToLoginPage(): Promise<void> {
         const page = await this.getPage();
         await page.goto(LogInPage.getEndpoint());
-        await page.waitForLoadState('networkidle');
     }
 
     async fillUsername(username: string): Promise<void> {

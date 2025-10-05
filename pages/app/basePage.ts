@@ -1,6 +1,5 @@
 import { Page } from '@playwright/test';
 import { Driver } from '../../utils/driver';
-import { ConfigReader } from '../../utils/configReader';
 
 export class BasePage{
     private page: Page;
